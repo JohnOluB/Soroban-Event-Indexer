@@ -1,0 +1,33 @@
+language: en
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+
+  path_instructions:
+    - path: "src/indexer/**"
+      instructions: |
+        Check for memory leaks, proper cursor management,
+        error handling on RPC failures, and no process crashes.
+
+    - path: "src/api/**"
+      instructions: |
+        Review for input validation, consistent error response
+        shape, and proper HTTP status codes.
+
+    - path: "src/db/**"
+      instructions: |
+        Check for proper Prisma error handling, no raw SQL
+        injection vectors, and migration safety.
+
+    - path: "tests/**"
+      instructions: |
+        Ensure no real network or DB calls without mocking.
+        Flag missing coverage for error and edge cases.
+
+chat:
+  auto_reply: true
