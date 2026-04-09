@@ -70,3 +70,54 @@ Merged PRs trigger your Drips stream. Payments flow continuously to your registe
 ---
 
 ## Project Structure
+
+soroban-event-indexer/
+├── src/
+│   ├── indexer/              # Core polling loop, cursor management, event decoder
+│   ├── api/
+│   │   ├── routes/           # REST route handlers (events, contracts, health)
+│   │   └── middleware/       # Auth, rate limiting, error handling
+│   ├── db/
+│   │   ├── migrations/       # Prisma migration files
+│   │   └── models/           # Prisma schema and typed model helpers
+│   └── utils/                # RPC client factory, XDR decoder, logger
+├── scripts/                  # Backfill scripts, DB seed scripts
+├── tests/
+│   ├── unit/                 # Indexer logic, decoder, utils
+│   └── integration/          # API endpoint tests against test DB
+├── docker/                   # Dockerfile and compose overrides
+├── config/                   # Environment config schemas (zod)
+├── docker-compose.yml
+├── .env.example
+└── README.md
+
+---
+
+## Quick Start
+
+```bash
+cp .env.example .env
+# Fill in SOROBAN_RPC_URL, DATABASE_URL, CONTRACT_IDS
+
+docker-compose up -d
+npm install && npm run migrate && npm run dev
+```
+
+### REST API
+GET /events?contractId=C...&limit=50&cursor=...
+GET /events/:id
+GET /contracts
+GET /health
+
+### WebSocket
+```js
+const ws = new WebSocket('ws://localhost:3001');
+ws.send(JSON.stringify({ type: 'subscribe', contractId: 'C...' }));
+ws.onmessage = (e) => console.log(JSON.parse(e.data));
+```
+
+---
+
+## License
+
+MIT © soroban-event-indexer contributors
